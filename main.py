@@ -94,7 +94,7 @@ def add_text(event):# 텍스트 박스의 내용을 가져와서 클릭한 위�
 
     text = text_box.get()
     canvas.create_text(event.x, event.y, text=text, fill="black", font=('Arial', 12))
-   
+
 
 def toggle_fullscreen(event):
     window.state = not window.state
@@ -202,5 +202,25 @@ button_brush_color = Button(window, text="Change Brush Color", command=change_br
 button_brush_color.pack(side=LEFT)
 
 set_paint_mode_normal() # 프로그램 시작 시 기본 그리기 모드 설정
+
+from tkinter import filedialog  # 파일 대화 상자를 가져옴
+
+# 이미지 저장 함수
+def save_image():
+    file = filedialog.asksaveasfilename(defaultextension='.png')  # 파일 대화 상자를 열어 파일 이름을 얻음
+    if file:
+        x = window.winfo_rootx() + canvas.winfo_x()
+        y = window.winfo_rooty() + canvas.winfo_y()
+        x1 = x + canvas.winfo_width()
+        y1 = y + canvas.winfo_height()
+        try:
+            ImageGrab.grab().crop((x, y, x1, y1)).save(file)
+            messagebox.showinfo("성공", "이미지가 성공적으로 저장되었습니다.")
+        except Exception as e:
+            messagebox.showinfo("오류", str(e))
+
+# 이미지 저장 버튼 추가
+button_save = Button(window, text="이미지 저장", command=save_image)
+button_save.pack(side=LEFT)
 
 window.mainloop()
